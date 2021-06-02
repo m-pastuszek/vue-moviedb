@@ -5,7 +5,7 @@ import store from './store'
 import vuetify from './plugins/vuetify'
 
 Vue.config.productionTip = false
-
+Vue.prototype.$appVersion = '1.0.4'
 new Vue({
   router,
   store,
