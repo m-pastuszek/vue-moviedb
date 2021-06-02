@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Index from '../views/Index.vue'
 import Movies from '../views/Movies.vue'
 
 Vue.use(VueRouter)
@@ -8,11 +7,6 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'Index',
-    component: Index
-  },
-  {
-    path: '/baza-filmow',
     name: 'Movies',
     component: Movies
   },

@@ -1,5 +1,12 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
-  </div>
+  <v-card class="pa-6 ma-3">
+    <v-card-title>
+      O projekcie
+    </v-card-title>
+    <v-card-text>
+      <div class="body-1">Projekt i wykonanie: <strong>Marcin Pastuszek</strong></div>
+      <div class="body-1">Data realizacji: <strong>2 czerwca 2021</strong></div>
+      <div class="body-1">Nr albumu: <strong>108599</strong></div>
+    </v-card-text>
+  </v-card>
 </template>

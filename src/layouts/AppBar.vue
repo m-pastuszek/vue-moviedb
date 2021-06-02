@@ -87,8 +87,7 @@ export default {
   },
   data: () => ({
     menuItems: [
-      { title: 'Strona główna', url: '/', icon: 'mdi-home' },
-      { title: 'Baza filmów', url: 'baza-filmow', icon: 'mdi-movie' },
+      { title: 'Baza filmów', url: '/', icon: 'mdi-movie' },
       { title: 'O projekcie', url: 'o-projekcie', icon: 'mdi-information' }
     ],
     rightDrawerVisible: false
