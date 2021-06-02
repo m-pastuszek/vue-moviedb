@@ -1,29 +1,27 @@
 <template>
   <v-app>
+    <!-- Belka menu -->
     <AppBar></AppBar>
 
-    <v-main>
-      <router-view/>
-    </v-main>
+    <!-- Zawartość strony -->
+    <AppView></AppView>
 
     <!-- Stopka -->
-    <Footer></Footer>
+    <AppFooter></AppFooter>
   </v-app>
 </template>
 
 <script>
 import AppBar from './layouts/AppBar'
-import Footer from './layouts/Footer'
+import AppView from './layouts/View'
+import AppFooter from './layouts/Footer'
 
 export default {
   name: 'App',
-
-  data: () => ({
-
-  }),
   components: {
     AppBar,
-    Footer
+    AppView,
+    AppFooter
   }
 }
 </script>
