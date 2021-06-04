@@ -1,94 +1,93 @@
 <template>
   <v-card
-    class="mx-auto">
+    class="mx-auto overflow-hidden"
+  >
     <v-img
-      class="white--text align-end"
-      height="200px"
-      v-bind:src="'http://image.tmdb.org/t/p/original/' + movieDetails.backdrop_path"
-      gradient="to top right, rgba(128,128,128,.33), rgba(25,32,72,.7)"
-    >
-      <v-card-text class="pt-3">
-        <div>{{ movieDetails.original_title }}</div>
-        <p class="text-h4">
-          {{ movieDetails.title }} ({{ getYear(movieDetails.release_date) }})
-        </p>
-      </v-card-text>
-    </v-img>
-    <v-card-text class="pt-5">
-      <v-row>
-        <v-col
-          cols="2"
-          class="align-center"
-        >
-          <v-img
-            class="rounded-lg"
-            v-bind:src="'http://image.tmdb.org/t/p/original/' + movieDetails.poster_path"
-            width="250"
-          ></v-img>
-        </v-col>
-        <v-col cols="10">
-          <div class="text-h6 text-uppercase">Opis</div>
-          <div class="body-2 ">{{ movieDetails.overview }}</div>
-          <v-divider class="mt-3"></v-divider>
-          <div class="text-h6 text-uppercase">Szczegółowe informacje</div>
-          <div class="body-2">
-            <v-simple-table>
-              <tbody>
-              <tr>
-                <td>Data premiery</td>
-                <td>
-                  <v-chip class="mx-1" color="secondary" >{{ formatDate(movieDetails.release_date) }}</v-chip>
-                </td>
-              </tr>
-              <tr>
-                <td>Gatunki</td>
-                <td>
-                  <v-chip class="mx-1" color="primary" v-for="genre in movieDetails.genres" :key="genre.id">{{ genre.name }}</v-chip></td>
-              </tr>
-              <tr>
-                <td>Ocena widzów</td>
-                <td>
-                  <v-chip class="mx-1" :color="getVoteColor(movieDetails.vote_average)">{{ movieDetails.vote_average }}</v-chip> na podstawie {{ movieDetails.vote_count }} ocen.
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Firmy produkcyjne
-                </td>
-                <td>
-                  <v-chip class="mx-1" color="red" text-color="white" v-for="production_company in movieDetails.production_companies" :key="production_company.id">{{ production_company.name }}</v-chip>
-                </td>
-              </tr>
-              </tbody>
-            </v-simple-table>
-          </div>
-        </v-col>
+      height="250"
+      v-if="movie.backdrop_path == null"
+      src="no_image.png"
+    ></v-img>
+    <v-img
+      height="250"
+      v-else
+      v-bind:src="'http://image.tmdb.org/t/p/w500/' + movie.backdrop_path"
+    ></v-img>
+    <v-card-title class="align-start">
+      <div>
+        <span class="text-h6" >{{ movie.title }}</span>
+        <div class="grey--text font-weight-light text-h7">
+          {{ movie.original_title }}
+        </div>
+      </div>
+    </v-card-title>
+    <v-divider></v-divider>
+    <v-card-actions>
+      <v-row
+        align="center"
+        class="mx-0"
+      >
+        <v-rating
+          :value="movie.vote_average/2"
+          background-color="grey"
+          color="warning"
+          dense
+          half-increments
+          readonly
+          size="25"
+        ></v-rating>
+
+        <div class="grey--text text--lighten-2 ms-4">
+          {{ movie.vote_average }}
+        </div>
       </v-row>
-    </v-card-text>
+      <v-spacer></v-spacer>
+      <span class="pr-4 grey--text text--darken-2 font-weight-light text-caption">{{ movie.vote_count }} ocen</span>
+    </v-card-actions>
+    <div class="pa-3 pt-0 text-caption">
+      {{ movie.overview | truncate(260, '...')}}
+    </div>
+
+    <div class="pa-3 pt-0 text-center">
+      <v-dialog>
+        <template v-slot:activator="{ on }">
+          <!-- Przycisk "WIĘCEJ INFORMACJI -->
+          <v-btn
+            color="primary"
+            rounded
+            v-on="on"
+            @click="getMovieDetails(movie.id)"
+          >
+            Więcej informacji
+          </v-btn>
+        </template>
+        <!-- Wysakująca karta z informacjami o filmie -->
+        <MovieDetailsCard :movieDetails="movieDetails"></MovieDetailsCard>
+      </v-dialog>
+    </div>
   </v-card>
 </template>
 
 <script>
-import moment from 'moment'
-
-export default ({
-  name: 'MovieDetailsCard',
-  props: ['movieDetails'],
+import MovieDetailsCard from './DetailsCard'
+import axios from 'axios'
+export default {
+  name: 'MovieCard',
+  components: {
+    MovieDetailsCard
+  },
+  props: ['movie'],
+  data: () => ({
+    movieDetails: []
+  }),
   methods: {
-    getYear (date) {
-      return moment(date).format('YYYY')
-    },
-    formatDate (date) {
-      moment.locale('pl')
-      return moment(date).format('LL')
-    },
-    getVoteColor (average) {
-      if (average < 4) { return 'red' }
-      if (average >= 4 && average < 7) { return 'warning' }
-      if (average >= 7) { return 'green' }
+    getMovieDetails (id) {
+      const URL = 'https://api.themoviedb.org/3/movie/' + id + '?api_key=' + this.$apiKey + '&language=pl'
+      axios
+        .get(URL)
+        .then(response => { this.movieDetails = response.data })
     }
   }
-})
+}
 </script>
 
 <style scoped>

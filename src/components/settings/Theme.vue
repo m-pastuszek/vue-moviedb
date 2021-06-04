@@ -8,9 +8,6 @@
 <script>
 export default {
   name: 'ThemeSettings',
-  data () {
-    //
-  },
   methods: {
     switchTheme () {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark
